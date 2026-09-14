@@ -50,14 +50,7 @@ class input_monitor extends uvm_monitor;
        m.AWPROT =vif.in_mon_if.AWPROT;
        m.WSTRB =vif.in_mon_if.WSTRB;
 
-       m.AWREADY = vif.in_mon_if.AWREADY;
-m.WREADY  = vif.in_mon_if.WREADY;
-
-m.BVALID  = vif.in_mon_if.BVALID;
-m.ARREADY = vif.in_mon_if.ARREADY;
-
-m.RVALID  = vif.in_mon_if.RVALID;
-      
+        
      end
       in_monf.write(m);
        `uvm_info ("axi_in_monitor " , $sformatf("axi_in_monitor : awvalid=%d | awaddr=%d |  wvalid=%d  | wdata=%d | bready=%d | arvalid=%d | araddr=%d | rready=%d | arprot=%d | awprot=%d | wstrb=%d |",m.AWVALID , m.AWADDR ,m.WVALID ,m.WDATA ,m.BREADY ,m.ARVALID ,m.ARADDR ,m.RREADY ,m.ARPROT ,m.AWPROT ,m.WSTRB),UVM_NONE)
