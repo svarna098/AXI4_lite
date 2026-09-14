@@ -45,36 +45,18 @@ clocking drv_if @(posedge clk);
   default input #1 output #1;
 
   input rst;
-
-  // Master drives these
-  output AWADDR, AWPROT, AWVALID;
-  output WDATA, WSTRB, WVALID;
-  output BREADY;
-  output ARADDR, ARPROT, ARVALID;
-  output RREADY;
-
-  // Slave drives these (driver reads them)
-  input AWREADY;
-  input WREADY;
-  input BRESP;
-  input BVALID;
-  input ARREADY;
-  input RDATA;
-  input RRESP;
-  input RVALID;
+  output AWADDR, AWPROT, AWVALID, WDATA, WSTRB, WVALID, BREADY,ARADDR, ARPROT, ARVALID, RREADY;
+  input AWREADY, WREADY, BRESP, BVALID,ARREADY,RDATA, RRESP,RVALID;
 
 endclocking
 
 clocking in_mon_if @ (posedge clk);
   default input #1 output #1;
-  
   input AWADDR , AWPROT ,AWVALID , WDATA,WSTRB,WVALID,BREADY,ARADDR,ARPROT,ARVALID ,RREADY , AWREADY , WREADY ,BRESP ,BVALID ,ARREADY ,RDATA ,RRESP ,RVALID;
-  
 endclocking
 
 clocking out_mon_if @ (posedge clk);
   default input #1 output #1;
-
   input AWREADY , WREADY ,BRESP ,BVALID ,ARREADY ,RDATA ,RRESP ,RVALID;
 endclocking 
 
