@@ -73,31 +73,21 @@ task drive_in(trans d);
     vif.drv_if.AWPROT <= d.AWPROT;
       
     if (d.AWVALID && aw_flag == 0) begin
-
         vif.drv_if.AWADDR <= d.AWADDR;
         aw_flag = 1;
-
     end
 
     if (d.WVALID && w_flag == 0) begin
-
         vif.drv_if.WDATA <= d.WDATA;
         w_flag = 1;
-
     end
 
     if (aw_flag == 1 && d.AWVALID && vif.drv_if.AWREADY) begin
-
         aw_flag = 0;
-
-
     end
 
     if (w_flag == 1 && d.WVALID && vif.drv_if.WREADY) begin
-
         w_flag = 0;
-  
-
     end
 
     if (aw_flag == 0 && w_flag == 0) begin
@@ -107,8 +97,6 @@ task drive_in(trans d);
     if (d.ARVALID) begin
         vif.drv_if.ARADDR <= d.ARADDR;
     end
-
-
 
     end
 `uvm_info ("axi_driver " , $sformatf("axi_driver : awvalid=%d | awaddr=%d |  wvalid=%d  | wdata=%d | bready=%d | arvalid=%d | araddr=%d | rready=%d | arprot=%d | awprot=%d | wstrb=%d |",d.AWVALID , d.AWADDR ,d.WVALID ,d.WDATA ,d.BREADY ,d.ARVALID ,d.ARADDR ,d.RREADY ,d.ARPROT ,d.AWPROT ,d.WSTRB),UVM_NONE)
