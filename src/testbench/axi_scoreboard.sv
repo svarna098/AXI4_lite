@@ -98,7 +98,7 @@ task compare(trans r);
 endtask
 
 task reference();
-  
+/*  
  if (!e.rst) begin
     AWready = 0;
     Wready = 0;
@@ -116,7 +116,7 @@ task reference();
     r_state = r_idle;
   end
   else begin
-
+*/
  case(state)
 
   idle : begin
@@ -201,7 +201,7 @@ task reference();
 
     if(Waddr > 32'h3C)
       Bresp = 2'b11;
-    else if((Waddr/4) >= 32'd10 && (Waddr/4) <= 32'd12)
+    else if(Waddr >= 32'h28 && Waddr<= 32'h30)
       Bresp = 2'b10;
     else begin
       Bresp = 2'b00;
@@ -243,7 +243,7 @@ endcase
         Rdata = 32'd0;
       end
 
-      else if((addr/4) >= 32'd13 && (addr/4) <= 32'd14) begin
+      else if(addr >= 32'h34 && addr <= 32'h38) begin
         Rresp = 2'b10;
         Rdata = 32'd0;
       end
@@ -260,7 +260,7 @@ endcase
 end
 
   endcase
-end
+//end
 endtask
 endclass
    
