@@ -31,16 +31,7 @@ parameter DATA_WIDTH = 32,
     logic                       RVALID;
     logic                       RREADY;
 
-/*
-clocking drv_if  @ (posedge clk );
-  default input #1 output #1;
 
-  input rst;
-  output AWADDR , AWPROT ,AWVALID , WDATA,WSTRB,WVALID,BREADY,ARADDR,ARPROT,ARVALID ,RREADY;
-  input AWREADY , WREADY , ARREADY ;
- 
-endclocking 
-*/
 clocking drv_if @(posedge clk);
   default input #1 output #1;
 
@@ -95,8 +86,7 @@ assert property(p3)
 property p4;
   @(posedge clk)
   disable iff (!rst)
-  (AWVALID && AWREADY && WVALID && WREADY)
-  |->  BVALID;
+  (AWVALID && AWREADY && WVALID && WREADY) |->  BVALID;
 endproperty
 
 assert property(p4)
