@@ -62,7 +62,7 @@ property p1;
   AWVALID && !AWREADY |=> (AWVALID throughout AWREADY[->1]);
 endproperty
 
-assert property(p1)
+  assert property(p1);
   
 
 property p2;
@@ -71,7 +71,7 @@ property p2;
   WVALID && !WREADY |=> (WVALID throughout AWREADY[->1]);
 endproperty
 
-assert property(p2)
+  assert property(p2);
  
 
 property p3;
@@ -80,7 +80,7 @@ property p3;
   RVALID && !RREADY |=> (RVALID throughout AWREADY[->1]);
 endproperty
 
-assert property(p3)
+  assert property(p3);
  
 
 property p4;
@@ -89,7 +89,7 @@ property p4;
   (AWVALID && AWREADY && WVALID && WREADY) |->  BVALID;
 endproperty
 
-assert property(p4)
+  assert property(p4);
 
 /*
 property p5;
