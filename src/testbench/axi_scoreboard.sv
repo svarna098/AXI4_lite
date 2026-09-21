@@ -44,11 +44,13 @@ bit w_flag;
      forever begin
       in_mon_scb.get (e);
        reference ();
-        `uvm_info ("axi_in_monitor_scb " , $sformatf("axi_in_monitor : awvalid=%d | awaddr=%d |  wvalid=%d  | wdata=%d | bready=%d | arvalid=%d | araddr=%d | rready=%d | arprot=%d |  awprot=%d | wstrb=%d |",e.AWVALID ,e.AWADDR ,e.WVALID ,e.WDATA ,e.BREADY ,e.ARVALID ,e.ARADDR ,e.RREADY ,e.ARPROT ,e.AWPROT ,e.WSTRB),UVM_NONE)
+           $display("=====================================================in_monitor_scb=========================================================================================");
+        `uvm_info ("axi_in_monitor_scb " , $sformatf("axi_in_monitor : awvalid=%0d | awaddr=%0d |  wvalid=%0d  | wdata=%0d | bready=%0d | arvalid=%0d | araddr=%0d | rready=%0d | arprot=%0d |  awprot=%0d | wstrb=%0d |",e.AWVALID ,e.AWADDR ,e.WVALID ,e.WDATA ,e.BREADY ,e.ARVALID ,e.ARADDR ,e.RREADY ,e.ARPROT ,e.AWPROT ,e.WSTRB),UVM_NONE)
      
       out_mon_scb.get (out_mon_t);
        compare (out_mon_t );
-      `uvm_info ("axi_out_monitor_scb" , $sformatf("axi_out_monitor : awready=%d | wready=%d |  bresp=%d  | bvalid=%d | arready=%d | rdata=%d | rresp=%d | rvalid=%d |",out_mon_t.AWREADY , out_mon_t.WREADY ,out_mon_t.BRESP ,out_mon_t.BVALID ,out_mon_t.ARREADY ,out_mon_t.RDATA ,out_mon_t.RRESP ,out_mon_t.RVALID ),UVM_NONE)
+         $display("=======================================================out_monitor_scb=========================================================================================");
+      `uvm_info ("axi_out_monitor_scb" , $sformatf("axi_out_monitor : awready=%0d | wready=%0d |  bresp=%0d  | bvalid=%0d | arready=%0d | rdata=%0d | rresp=%0d | rvalid=%0d |",out_mon_t.AWREADY , out_mon_t.WREADY ,out_mon_t.BRESP ,out_mon_t.BVALID ,out_mon_t.ARREADY ,out_mon_t.RDATA ,out_mon_t.RRESP ,out_mon_t.RVALID ),UVM_NONE)
      end
  endtask
 
@@ -98,25 +100,9 @@ task compare(trans r);
 endtask
 
 task reference();
-/*  
- if (!e.rst) begin
-    AWready = 0;
-    Wready = 0;
-    Bvalid = 0;
-    Bresp = 0;
-    Rvalid =0;
-    ARready = 0;
-    Rresp = 0;
-    Rdata  = 0;
 
-    aw_flag = 0;
-    w_flag  = 0;
+  
 
-    state = idle;
-    r_state = r_idle;
-  end
-  else begin
-*/
  case(state)
 
   idle : begin
@@ -128,7 +114,7 @@ task reference();
     aw_flag = 0;
     w_flag  = 0;
 
-    if(e.AWVALID && e.WVALID)
+    if((e.AWVALID && e.WVALID)||(e.AWVALID || e.WVALID))
       state = w_both;
 
   end
@@ -168,7 +154,7 @@ task reference();
     if(e.AWVALID && AWready) begin
       Waddr = e.AWADDR;
       aw_flag = 1;
-
+      AWready = 0;
       if(w_flag)
         state = w_resp;
     end
@@ -178,14 +164,14 @@ task reference();
 
   w_data : begin
 
-    AWready = 0;
+  //  AWready = 0;
     Wready  = 1;
 
     if(e.WVALID && Wready) begin
       Wdata  = e.WDATA;
       strb   = e.WSTRB;
       w_flag = 1;
-
+       Wready  = 0;
       if(aw_flag)
         state = w_resp;
     end
@@ -199,10 +185,18 @@ task reference();
     Wready  = 0;
     Bvalid  = 1;
 
-    if(Waddr > 32'h3C)
+    if(Waddr > 32'h3C) begin
       Bresp = 2'b11;
-    else if(Waddr >= 32'h28 && Waddr<= 32'h30)
+      Wdata=32'd0;
+    end
+   // else if (Waddr[1:0]!=2'b00) begin
+    //  Bresp = 2'b01;
+    //   Wdata=32'd0;
+   // end
+    else if(Waddr >= 32'h28 && Waddr<= 32'h30 && Waddr[1:0]!=2'b00) begin
       Bresp = 2'b10;
+       Wdata=32'd0;
+    end
     else begin
       Bresp = 2'b00;
 
@@ -236,14 +230,17 @@ endcase
     r_data: begin
       Rvalid=1;
 
-      if(Rvalid == 1)begin
+     // if(Rvalid == 1)begin
 
       if(addr > 32'h3C) begin
         Rresp = 2'b11;
         Rdata = 32'd0;
       end
-
-      else if(addr >= 32'h34 && addr <= 32'h38) begin
+  //    else if (Waddr[1:0]!=2'b00) begin
+    //    Rresp = 2'b01;
+    //    Rdata =32'd0;
+  //    end
+      else if(addr >= 32'h34 && addr <= 32'h38 && Waddr[1:0]!=2'b00) begin
         Rresp = 2'b10;
         Rdata = 32'd0;
       end
@@ -257,10 +254,11 @@ endcase
         r_state = r_idle;
 
     end
-end
+//end
 
   endcase
 //end
 endtask
+
 endclass
    

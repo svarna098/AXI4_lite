@@ -254,11 +254,11 @@ class axi_aw_w_sequence1 extends uvm_sequence #(trans);
     finish_item(req);
     
     start_item(req);
-    assert(req.randomize() with { ARVALID == 0;AWVALID == 0;WVALID  == 1;RREADY  == 0;BREADY  == 1; WDATA  == 32'd30; AWADDR ==32'd100 ;WSTRB==4'b1111;});
+    assert(req.randomize() with { ARVALID == 0;AWVALID == 0;WVALID  == 1;RREADY  == 0;BREADY  == 1; WDATA  == 32'd30; AWADDR ==32'd12 ;WSTRB==4'b1111;});
     finish_item(req);
     
     start_item(req);
-    assert(req.randomize() with { ARVALID == 1;AWVALID == 0;WVALID  == 0;RREADY  == 1;BREADY  == 0; ARADDR  == 32'd100;WSTRB==4'b1111;});
+    assert(req.randomize() with { ARVALID == 1;AWVALID == 0;WVALID  == 0;RREADY  == 1;BREADY  == 0; ARADDR  == 32'd12;WSTRB==4'b1111;});
     finish_item(req);
   endtask
  endclass
@@ -271,8 +271,9 @@ class axi_aw_w_r_sequence1 extends uvm_sequence #(trans);
   endfunction
 
   task body();
-repeat(20)begin
+
     req = trans::type_id::create("req");
+repeat(20)begin
     start_item(req);
     assert(req.randomize() with { ARVALID == 0;AWVALID == 1;WVALID  == 0;RREADY  == 0;BREADY  == 1; AWADDR  == 32'd12;WSTRB==4'b1111;});
     finish_item(req);
@@ -354,7 +355,10 @@ class axi_aw_w_r_sequence_12 extends uvm_sequence #(trans);
     start_item(req);
     assert(req.randomize() with { ARVALID == 0;AWVALID == 0;WVALID  == 1;RREADY  == 0;BREADY  == 1; WDATA  == 32'd20;AWADDR  == 32'd12;WSTRB==4'b1111; });
     finish_item(req);
-    
+ 
+     start_item(req);
+    assert(req.randomize() with { ARVALID == 1;AWVALID == 0;WVALID  == 0;RREADY  == 1;BREADY  == 0; ARADDR  == 32'd12;WSTRB==4'b1111;});
+   finish_item(req);   
 
   endtask
  endclass
@@ -508,7 +512,7 @@ class axi_unaligned_write1 extends uvm_sequence #(trans);
   endfunction
 
   task body();
-   
+   repeat(10) begin
     req = trans::type_id::create("req");
 
     start_item(req);
@@ -520,6 +524,6 @@ class axi_unaligned_write1 extends uvm_sequence #(trans);
     start_item(req);
     assert(req.randomize() with {ARVALID==1; AWVALID==0; WVALID==0; RREADY==1; BREADY==0; ARADDR==32'd12;});
     finish_item(req);
-
+end
   endtask
 endclass

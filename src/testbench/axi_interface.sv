@@ -31,7 +31,16 @@ parameter DATA_WIDTH = 32,
     logic                       RVALID;
     logic                       RREADY;
 
+/*
+clocking drv_if  @ (posedge clk );
+  default input #1 output #1;
 
+  input rst;
+  output AWADDR , AWPROT ,AWVALID , WDATA,WSTRB,WVALID,BREADY,ARADDR,ARPROT,ARVALID ,RREADY;
+  input AWREADY , WREADY , ARREADY ;
+ 
+endclocking 
+*/
 clocking drv_if @(posedge clk);
   default input #1 output #1;
 
@@ -62,8 +71,8 @@ property p1;
   AWVALID && !AWREADY |=> (AWVALID throughout AWREADY[->1]);
 endproperty
 
-  assert property(p1);
-  
+assert property(p1);
+
 
 property p2;
   @(posedge clk)
@@ -71,8 +80,11 @@ property p2;
   WVALID && !WREADY |=> (WVALID throughout AWREADY[->1]);
 endproperty
 
-  assert property(p2);
+assert property(p2);
+
+  
  
+
 
 property p3;
   @(posedge clk)
@@ -80,26 +92,27 @@ property p3;
   RVALID && !RREADY |=> (RVALID throughout AWREADY[->1]);
 endproperty
 
-  assert property(p3);
- 
+assert property(p3);
 
-property p4;
-  @(posedge clk)
-  disable iff (!rst)
-  (AWVALID && AWREADY && WVALID && WREADY) |->  BVALID;
-endproperty
 
-  assert property(p4);
 
-/*
+
 property p5;
   @(posedge clk)
   disable iff (!rst)
    (AWVALID && AWREADY && WVALID && WREADY && (AWADDR > 32'h3C) )|-> ##[1:$] (BRESP == 2'b11);
 endproperty
 
-assert property(p5)
-*/
+assert property(p5);
+
+property p6;
+  @(posedge clk)
+  disable iff (!rst)
+   (AWVALID && AWREADY && WVALID && WREADY && (AWADDR >= 32'h28 && AWADDR <= 32'h30) )|-> ##[1:$] (BRESP == 2'b10);
+endproperty
+
+assert property(p6);
+
 endinterface
 
 

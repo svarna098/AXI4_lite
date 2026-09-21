@@ -525,6 +525,7 @@ class test_aw_w_r extends axi_test;
 
  
   axi_aw_w_sequence1 s15;
+  axi_aw_w_r_sequence1 s16;
   function new(string name="test_aw_w_r", uvm_component parent);
     super.new(name,parent);
   endfunction
@@ -538,10 +539,12 @@ class test_aw_w_r extends axi_test;
     phase.raise_objection(this);
 
     s15 = axi_aw_w_sequence1::type_id::create("s15");
+     s16 = axi_aw_w_r_sequence1::type_id::create("s16");
 begin
    
     s15.start(env.in_agnt.seq);
-    
+    #40;
+     s16.start(env.in_agnt.seq);
 
     #100;
 end
@@ -880,7 +883,7 @@ class test_unaligned_write_1 extends axi_test;
     s27 = axi_aw_w_r_sequence_12::type_id::create("s27");
 begin
      s27.start(env.in_agnt.seq);
-     #40;
+    // #40;
     s26.start(env.in_agnt.seq);
     
     

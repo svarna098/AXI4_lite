@@ -5,12 +5,11 @@ class axi_drv extends uvm_driver #(trans);
    virtual axi_if.drv vif ;
   `uvm_component_utils (axi_drv);
    
-    bit [31:0] temp_addr ;
-    bit [31:0] temp_data ;
-    bit [31:0] temp_raddr ;
-        bit aw_flag = 0;
+    
+    bit aw_flag = 0;
     bit w_flag  = 0;
-
+    bit aw_done =0;
+    bit w_done = 0;
 
 
    function new ( string name= "axi_drv" , uvm_component parent );
@@ -30,6 +29,8 @@ class axi_drv extends uvm_driver #(trans);
 
    task run_phase (uvm_phase phase);
        wait (vif.drv_if.rst == 1) begin
+       
+      
         forever begin
              seq_item_port.get_next_item (req);
              drive_in (req);
@@ -70,36 +71,96 @@ task drive_in(trans d);
     vif.drv_if.AWPROT <= d.AWPROT; 
     vif.drv_if.ARPROT <= d.ARPROT;
     vif.drv_if.WSTRB  <= d.WSTRB;
-    vif.drv_if.AWPROT <= d.AWPROT;
+     vif.drv_if.BREADY <= d.BREADY;
+
+ 
+        if (aw_flag == 1 &&  vif.drv_if.AWREADY)
+ begin
+        aw_flag = 0;
+       // vif.drv_if.AWADDR <= d.AWADDR;
+       // aw_done=1;
+    end
+   
+    
+
+    if (w_flag == 1 &&  vif.drv_if.WREADY) begin
+        w_flag = 0;
+      //  w_done=1;
+    end
+  
+
       
     if (d.AWVALID && aw_flag == 0) begin
         vif.drv_if.AWADDR <= d.AWADDR;
+         vif.drv_if.WDATA <= d.WDATA;
         aw_flag = 1;
+        
     end
 
     if (d.WVALID && w_flag == 0) begin
         vif.drv_if.WDATA <= d.WDATA;
+        vif.drv_if.AWADDR <= d.AWADDR;
         w_flag = 1;
     end
 
-    if (aw_flag == 1 && d.AWVALID && vif.drv_if.AWREADY) begin
-        aw_flag = 0;
-    end
-
-    if (w_flag == 1 && d.WVALID && vif.drv_if.WREADY) begin
-        w_flag = 0;
-    end
-
-    if (aw_flag == 0 && w_flag == 0) begin
+    /*
+   
+    if (aw_done == 1 || w_done == 1) begin
         vif.drv_if.BREADY <= d.BREADY;
+   end
+
+
+    //  if (aw_flag == 0 && w_flag == 0) begin
+     //   vif.drv_if.BREADY <= d.BREADY;
+//    end
+
+  
+   if (vif.drv_if.BVALID && d.BREADY) begin
+      aw_done = 0;
+       w_done = 0;
     end
+*/
 
     if (d.ARVALID) begin
         vif.drv_if.ARADDR <= d.ARADDR;
     end
 
     end
-`uvm_info ("axi_driver " , $sformatf("axi_driver : awvalid=%d | awaddr=%d |  wvalid=%d  | wdata=%d | bready=%d | arvalid=%d | araddr=%d | rready=%d | arprot=%d | awprot=%d | wstrb=%d |",d.AWVALID , d.AWADDR ,d.WVALID ,d.WDATA ,d.BREADY ,d.ARVALID ,d.ARADDR ,d.RREADY ,d.ARPROT ,d.AWPROT ,d.WSTRB),UVM_NONE)
+  $display("==================================================================driver=========================================================================================");
+`uvm_info ("axi_driver " , $sformatf("axi_driver : awvalid=%0d | awaddr=%0d |  wvalid=%0d  | wdata=%0d | bready=%0d | arvalid=%0d | araddr=%0d | rready=%0d | arprot=%0d | awprot=%0d | wstrb=%0d | aw_flag=%d  | w_flag=%d  | aw_done=%d |w_done=%d |",d.AWVALID , d.AWADDR ,d.WVALID ,d.WDATA ,d.BREADY ,d.ARVALID ,d.ARADDR ,d.RREADY ,d.ARPROT ,d.AWPROT ,d.WSTRB , aw_flag , w_flag , aw_done ,w_done),UVM_NONE)
+  
 endtask
 
 endclass
+
+
+/*
+        if (aw_flag == 1 &&  vif.drv_if.AWREADY )
+ begin
+        aw_flag = 0;
+       // vif.drv_if.AWADDR <= d.AWADDR;
+       // aw_done=1;
+    end
+   
+    
+
+    if (w_flag == 1 &&  vif.drv_if.WREADY ) begin
+        w_flag = 0;
+      //  w_done=1;
+    end
+  
+
+      
+    if (aw_flag == 0) begin
+        vif.drv_if.AWADDR <= d.AWADDR;
+       //  vif.drv_if.WDATA <= d.WDATA;
+        aw_flag = 1;
+        
+    end
+
+    if ( w_flag == 0) begin
+        vif.drv_if.WDATA <= d.WDATA;
+       // vif.drv_if.AWADDR <= d.AWADDR;
+        w_flag = 1;
+    end
+*/
