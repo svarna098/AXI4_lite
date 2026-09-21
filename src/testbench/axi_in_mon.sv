@@ -50,12 +50,13 @@ class input_monitor extends uvm_monitor;
        m.AWPROT =vif.in_mon_if.AWPROT;
        m.WSTRB =vif.in_mon_if.WSTRB;
 
-        
+       
      end
       in_monf.write(m);
-       `uvm_info ("axi_in_monitor " , $sformatf("axi_in_monitor : awvalid=%d | awaddr=%d |  wvalid=%d  | wdata=%d | bready=%d | arvalid=%d | araddr=%d | rready=%d | arprot=%d | awprot=%d | wstrb=%d |",m.AWVALID , m.AWADDR ,m.WVALID ,m.WDATA ,m.BREADY ,m.ARVALID ,m.ARADDR ,m.RREADY ,m.ARPROT ,m.AWPROT ,m.WSTRB),UVM_NONE)
+        $display("===============================================================in_monitor=========================================================================================");
+       `uvm_info ("axi_in_monitor " , $sformatf("axi_in_monitor : awvalid=%0d | awaddr=%0d |  wvalid=%0d  | wdata=%0d | bready=%0d | arvalid=%0d | araddr=%0d | rready=%0d | arprot=%0d | awprot=%0d | wstrb=%0d |",m.AWVALID , m.AWADDR ,m.WVALID ,m.WDATA ,m.BREADY ,m.ARVALID ,m.ARADDR ,m.RREADY ,m.ARPROT ,m.AWPROT ,m.WSTRB),UVM_NONE)
     
-      $display("------------------------------------------");
+     
 
     endtask
 endclass

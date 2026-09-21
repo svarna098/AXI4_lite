@@ -46,8 +46,9 @@ class output_monitor extends uvm_monitor;
        out_m.RVALID =vif.out_mon_if.RVALID;
      end
       out_monf.write (out_m);
-        `uvm_info ("axi_out_monitor " , $sformatf("axi_out_monitor : awready=%d | wready=%d |  bresp=%d  | bvalid=%d | arready=%d | rdata=%d | rresp=%d | rvalid=%d |",out_m.AWREADY , out_m.WREADY ,out_m.BRESP ,out_m.BVALID ,out_m.ARREADY ,out_m.RDATA ,out_m.RRESP ,out_m.RVALID ),UVM_NONE)
-       $display("---------------------------------------------------");
+       $display("=====================================================out_monitor=========================================================================================");
+        `uvm_info ("axi_out_monitor " , $sformatf("axi_out_monitor : awready=%0d | wready=%0d |  bresp=%0d  | bvalid=%0d | arready=%0d | rdata=%0d | rresp=%0d | rvalid=%0d |",out_m.AWREADY , out_m.WREADY ,out_m.BRESP ,out_m.BVALID ,out_m.ARREADY ,out_m.RDATA ,out_m.RRESP ,out_m.RVALID ),UVM_NONE)
+ 
     
   endtask
 

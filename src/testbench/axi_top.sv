@@ -42,13 +42,15 @@ bit rst;
 
    initial begin
       uvm_config_db # (virtual axi_if) :: set (null,"*","axi_if",inf);
-       run_test ("test1");
+       run_test ("test1_reset");
    end
 
    initial begin
      rst =1'b0;
       # 12;
      rst =1'b1;
+     
+   
    end
 
    initial begin
