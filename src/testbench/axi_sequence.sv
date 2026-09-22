@@ -465,7 +465,7 @@ class axi_aw_aw_w_1 extends uvm_sequence #(trans);
  
    
     start_item(req);
-    assert(req.randomize() with { ARVALID == 0;AWVALID == 1;WVALID  == 0;RREADY  == 0;BREADY  == 1; AWADDR  == 32'd08;WSTRB==4'b1111;});
+     assert(req.randomize() with { ARVALID == 0;AWVALID == 1;WVALID  == 0;RREADY  == 0;BREADY  == 1; AWADDR  == 32'd04;WSTRB==4'b1111;});
     finish_item(req);
    
     start_item(req);
