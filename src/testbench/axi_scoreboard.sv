@@ -35,7 +35,7 @@ bit w_flag;
        super.new (name,parent);
        in_mon_scb = new ("in_mon_scb",this);
        out_mon_scb =new ("out_mon_scb",this);
-        // e = new("e");
+       
    endfunction
 
  task run_phase (uvm_phase phase);
